@@ -42,8 +42,8 @@ int multiGeneCircuit_RK_deterministic_multiprint(IntegerMatrix gene_interaction,
   std::fstream out_0("./results/sRACIPE_RK_"+file_name+"_g"+std::to_string(number_gene)+"_parameters.txt",std::ios::out);
   if(!out_0) {     Rcout << "Cannot open output file for writing parameters.\n";  }
 
-  //std::fstream out_ic("./results/sRACIPE_RK_"+file_name+"_g"+std::to_string(number_gene)+"_IC.txt",std::ios::out);
-  //if(!out_ic) {     Rcout << "Cannot open output file for writing parameters.\n";  }
+  std::fstream out_ic("./results/sRACIPE_RK_"+file_name+"_g"+std::to_string(number_gene)+"_IC.txt",std::ios::out);
+  if(!out_ic) {     Rcout << "Cannot open output file for writing parameters.\n";  }
 
   std::fstream out_1("./results/sRACIPE_RK_"+file_name+"_g"+std::to_string(number_gene)+"_output.txt",std::ios::out);
   if(!out_1) {     Rcout << "Cannot open output file.\n";  }
@@ -201,10 +201,10 @@ int multiGeneCircuit_RK_deterministic_multiprint(IntegerMatrix gene_interaction,
 
       for(int gene_count1=0;gene_count1<number_gene;gene_count1++)
       {
-        // out_ic<<std::setprecision(output_precision)<<expression_gene0[gene_count1]<<"\t";
+         out_ic<<std::setprecision(output_precision)<<expression_gene0[gene_count1]<<"\t";
         } //initial condition of each gene
 
-      // out_ic<<"\n";
+       out_ic<<"\n";
 
 
       ///////////////////////////////////////////////////////////////////////////////////////
@@ -420,8 +420,8 @@ int multiGeneCircuit_RK_deterministic_multiprint(IntegerMatrix gene_interaction,
     }
 
   }
-//  out_ic<<"\n";
- // out_ic.close();
+ // out_ic<<"\n";
+  out_ic.close();
   out_1.close();
   out_0.close();
   Rcout<<"Deterministic simulations using Runge-Kutta completed successfully. Data files are in results folder.\n";
