@@ -5,7 +5,7 @@
 using namespace Rcpp;
 
 extern unsigned u_seed;//2 = std::chrono::system_clock::now().time_since_epoch().count();
-unsigned g_seed = std::chrono::system_clock::now().time_since_epoch().count()*M_PI_4;
+unsigned g_seed = 123;//std::chrono::system_clock::now().time_since_epoch().count()*M_PI_4;
 
 extern std::mt19937_64 u_generator;// (u_seed2);
 std::mt19937_64 g_generator (g_seed);
