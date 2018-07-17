@@ -5,16 +5,16 @@
 using namespace Rcpp;
 
 extern unsigned u_seed;//2 = std::chrono::system_clock::now().time_since_epoch().count();
-unsigned g_seed = 123;//std::chrono::system_clock::now().time_since_epoch().count()*M_PI_4;
+extern unsigned g_seed ;//= 123;//std::chrono::system_clock::now().time_since_epoch().count()*M_PI_4;
 
 extern std::mt19937_64 u_generator;// (u_seed2);
-std::mt19937_64 g_generator (g_seed);
+extern std::mt19937_64 g_generator ;//(g_seed);
 
 //uniformly distributed random number generator2 in (0,1) range
 extern std::uniform_real_distribution<double> u_distribution;
 
 // Gaussian distributed random number generator2 with mean 0 and 1 standard deviation
-std::normal_distribution<double> g_distribution(0.0,1.0);
+extern std::normal_distribution<double> g_distribution;//(0.0,1.0);
 
 
 // Shifted hill function
@@ -25,7 +25,7 @@ extern double Hs_Racipe(double A, double AB0, int n_ab, double lambda_ab);
 
 // [[Rcpp::export]]
 
-int multiGeneCircuit_EM_uniform_Darray_annealing(IntegerMatrix gene_interaction, NumericVector threshold_gene,
+int multiGeneCircuit_EM_uniform_Darray_multiprint(IntegerMatrix gene_interaction, NumericVector threshold_gene,
                                                  double g_min, double g_max,
                                                  double k_min, double k_max, int possible_interactions,
                                                  long model_count_max,long threshold_max,
@@ -36,12 +36,15 @@ int multiGeneCircuit_EM_uniform_Darray_annealing(IntegerMatrix gene_interaction,
                                                  double D_max,  double D_shot_scaling,
                                                  int GENE_NOISE_SCALING, int file_writing_interval,
                                                  int D_levels, double D_scaling,
-                                                 int output_precision, int ANNEALING, int CONSTANT_NOISE, int INITIAL_CONDITIONS, String filename)
+                                                 int output_precision, int ANNEALING, int CONSTANT_NOISE,
+                                                 int INITIAL_CONDITIONS, String filename,
+                                                 double print_start, double print_interval)
 
 {
   std::string file_name= filename;
   Rcout<<"Running time evolution simulations for "<<std::to_string(number_gene)<<" genes..."<<"\n";
-  if(INITIAL_CONDITIONS>1) file_writing_interval=1;
+  //if(INITIAL_CONDITIONS>1)
+    file_writing_interval=1;
   D_max=D_max/sqrt(number_gene); //Scale the maximum noise by the number of genes.
   double D=D_max; // setting noise to maximum noise level
   double Darray[number_gene]; //array to scale the noise level in each gene
@@ -67,13 +70,13 @@ int multiGeneCircuit_EM_uniform_Darray_annealing(IntegerMatrix gene_interaction,
   //Create output file if not there already
 
 
-  std::fstream out_0("./results/sRACIPE_EM_"+file_name+"_g"+std::to_string(number_gene)+"_Annealing_"+std::to_string(ANNEALING)+"_parameters.txt",std::ios::out);
+  std::fstream out_0("./results/sRACIPE_EM_mp_"+file_name+"_g"+std::to_string(number_gene)+"_Annealing_"+std::to_string(ANNEALING)+"_parameters.txt",std::ios::out);
   if(!out_0) {     Rcout << "Cannot open output file for writing parameters.\n";  }
 
-  std::fstream out_ic("./results/sRACIPE_EM_"+file_name+"_g"+std::to_string(number_gene)+"_Annealing_"+std::to_string(ANNEALING)+"_IC.txt",std::ios::out);
+  std::fstream out_ic("./results/sRACIPE_EM_mp_"+file_name+"_g"+std::to_string(number_gene)+"_Annealing_"+std::to_string(ANNEALING)+"_IC.txt",std::ios::out);
   if(!out_ic) {     Rcout << "Cannot open output file for writing parameters.\n";  }
 
-  std::fstream out_1("./results/sRACIPE_EM_"+file_name+"_g"+std::to_string(number_gene)+"_Annealing_"+std::to_string(ANNEALING)+"_output.txt",std::ios::out);
+  std::fstream out_1("./results/sRACIPE_EM_mp_"+file_name+"_g"+std::to_string(number_gene)+"_Annealing_"+std::to_string(ANNEALING)+"_output.txt",std::ios::out);
   if(!out_1) {     Rcout << "Cannot open output file.\n";  }
 
   // std::fstream out_D("./results/multiGeneCircuit_EM_g"+std::to_string(number_gene)+"Annealing_"+std::to_string(ANNEALING)+"_noise.txt",std::ios::out);
@@ -280,6 +283,7 @@ int multiGeneCircuit_EM_uniform_Darray_annealing(IntegerMatrix gene_interaction,
           }
           //Rcout<<"D="<<D<<"\n";
           double i=0.0;
+          int print_counter = 0;
           do
           {
             for(int gene_count1=0;gene_count1<number_gene;gene_count1++)
@@ -326,8 +330,19 @@ int multiGeneCircuit_EM_uniform_Darray_annealing(IntegerMatrix gene_interaction,
             for(int gene_count1=0;gene_count1<number_gene;gene_count1++){
               expression_gene[gene_count1]=expression_gene_h[gene_count1];}
 
+            if(file_count==D_levels-1) {
+            if((i> (print_start + print_interval*print_counter)) && i < (h+print_start + print_interval*print_counter))
+            {
+              print_counter++;
+              //std::cout<<i<<"\n";
+              for(int gene_count1=0;gene_count1<number_gene;gene_count1++)
+              {
+                out_1<<std::setprecision(output_precision)<<expression_gene[gene_count1]<<"\t";
+              }
+              //out_1<<"\n";
+            }
 
-
+            }
             i+=h;
 
 
@@ -340,7 +355,7 @@ int multiGeneCircuit_EM_uniform_Darray_annealing(IntegerMatrix gene_interaction,
             {
               out_1<<std::setprecision(output_precision)<<expression_gene[gene_count1]<<"\t";
             }
-            out_1<<"\n";
+
           }
           else {
 
@@ -351,8 +366,8 @@ int multiGeneCircuit_EM_uniform_Darray_annealing(IntegerMatrix gene_interaction,
           }
 
         }
-
-       out_ic<<"\n";
+        out_1<<"\n";
+        out_ic<<"\n";
       }
 
     }
@@ -380,6 +395,7 @@ int multiGeneCircuit_EM_uniform_Darray_annealing(IntegerMatrix gene_interaction,
 
 
   }
+  out_ic.close();
   out_1.close();
   out_0.close();
   Rcout<<"Simulations completed successfully. Data files are in results folder.\n";

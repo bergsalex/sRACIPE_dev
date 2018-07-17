@@ -26,7 +26,7 @@ topology_file <- paste(getwd(), "/inputs/",topology_file,sep="")
 
     results_directory <- ifelse(!dir.exists(file.path(working_directory, "results")), dir.create(file.path(working_directory, "results")), file.path(working_directory, "results"))
 
-    output_file <- sRACIPE_RK_deterministic_multiprint(topology_file = topology_file, NUM_MODELS = 10, INITIAL_CONDITIONS = 1, SIM_TIME = 100.0, STEP_SIZE = 0.01, OUTPUT_PRECISION = 8,PRINT_START = 50.0, PRINT_INTERVAL = 10)
+    output_file <- sRACIPE_stochastic_multiprint(topology_file = topology_file, NUM_MODELS = 10, INITIAL_CONDITIONS = 1, SIM_TIME = 100.0, STEP_SIZE = 0.01, OUTPUT_PRECISION = 8,PRINT_START = 50.0, PRINT_INTERVAL = 10, ANNEAL = F, NOISE_LEVELS = 6, MAX_NOISE= 16.0,NOISE_SCALING_FACTOR=0.25)
 
     rm(output_file)
 }
@@ -37,12 +37,12 @@ topology_file <- paste(getwd(), "/inputs/",topology_file,sep="")
 
 
 
-rm(list = ls())
-library(sRACIPEv03)
-working_directory <- getwd()
- topology_file <- "inputs/test2.tpo"
-topology <- sRACIPE_load_topology(topology_file = topology_file)
-output_file <- sRACIPE_stochastic_multiprint(topology_file = topology_file, NUM_MODELS = 10,ANNEAL = T, NOISE_LEVELS = 4, PRINT_START = 40, PRINT_INTERVAL = 4)
+# rm(list = ls())
+# library(sRACIPEv03)
+# working_directory <- getwd()
+#  topology_file <- "inputs/test2.tpo"
+# topology <- sRACIPE_load_topology(topology_file = topology_file)
+# output_file <- sRACIPE_stochastic_multiprint(topology_file = topology_file, NUM_MODELS = 10, INITIAL_CONDITIONS = 1, SIM_TIME = 100.0, STEP_SIZE = 0.01, OUTPUT_PRECISION = 8,PRINT_START = 50.0, PRINT_INTERVAL = 10, ANNEAL = F, NOISE_LEVELS = 6, MAX_NOISE= 16.0,NOISE_SCALING_FACTOR=0.25)
 
 #output_file <- sRACIPE_RK_adaptive_deterministic(topology_file = topology_file)
 
@@ -85,18 +85,6 @@ output_file <- sRACIPE_stochastic_multiprint(topology_file = topology_file, NUM_
 # heatmap(t(data_simulation), col=plot_color, hclustfun = function(x) hclust(x,method = 'ward.D2'), distfun=function(x) as.dist((1-cor(t(x), method = "spear"))/2))
 
 
-int multiGeneCircuit_EM_uniform_Darray_annealing(IntegerMatrix gene_interaction, NumericVector threshold_gene,
-                                                 double g_min, double g_max,
-                                                 double k_min, double k_max, int possible_interactions,
-                                                 long model_count_max,long threshold_max,
-                                                 double h, double lambda_min,
-                                                 double lambda_max, int n_min, int n_max,
-                                                 double tot_time, double median_range,
-                                                 double standard_deviation_factor, int number_gene,
-                                                 double D_max,  double D_shot_scaling,
-                                                 int GENE_NOISE_SCALING, int file_writing_interval,
-                                                 int D_levels, double D_scaling,
-                                                 int output_precision, int ANNEALING, int CONSTANT_NOISE, int INITIAL_CONDITIONS, String filename)
 
 
 
