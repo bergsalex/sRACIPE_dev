@@ -26,7 +26,7 @@ topology_file <- paste(getwd(), "/inputs/",topology_file,sep="")
 
     results_directory <- ifelse(!dir.exists(file.path(working_directory, "results")), dir.create(file.path(working_directory, "results")), file.path(working_directory, "results"))
 
-    output_file <- sRACIPE_stochastic_multiprint(topology_file = topology_file, NUM_MODELS = 10, INITIAL_CONDITIONS = 1, SIM_TIME = 100.0, STEP_SIZE = 0.01, OUTPUT_PRECISION = 8,PRINT_START = 50.0, PRINT_INTERVAL = 10, ANNEAL = F, NOISE_LEVELS = 6, MAX_NOISE= 16.0,NOISE_SCALING_FACTOR=0.25)
+    output_file <- sRACIPE_stochastic_multiprint(topology_file = topology_file, NUM_MODELS = 10000, INITIAL_CONDITIONS = 1, SIM_TIME = 100.0, STEP_SIZE = 0.01, OUTPUT_PRECISION = 8,PRINT_START = 50.0, PRINT_INTERVAL = 10, ANNEAL = F, NOISE_LEVELS = 6, MAX_NOISE= 16.0,NOISE_SCALING_FACTOR=0.25)
 
     rm(output_file)
 }

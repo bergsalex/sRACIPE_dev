@@ -136,7 +136,7 @@ output_directory<-file.path(working_directory, "results")
 
 gene_interaction <- matrix(0, nrow = topology$number_gene, ncol = topology$number_gene)
 threshold_gene <- rep(0, topology$number_gene)
-Rcpp::sourceCpp("src/interaction_reader.cpp")
+#Rcpp::sourceCpp("src/interaction_reader.cpp")
 gene_interaction <- interaction_reader(gene_interaction,topology$topology_filepath,  topology$filename, topology$number_gene)
 
 
