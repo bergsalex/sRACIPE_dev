@@ -2,7 +2,7 @@
 using namespace Rcpp;
 
 
-//extern unsigned u_seed ;//= std::chrono::system_clock::now().time_since_epoch().count();
+// extern unsigned u_seed ;//= 3654734;//std::chrono::system_clock::now().time_since_epoch().count();
 //extern unsigned g_seed = std::chrono::system_clock::now().time_since_epoch().count()*M_PI_4;
 
 //extern std::mt19937_64 u_generator;// (u_seed);
@@ -10,11 +10,6 @@ using namespace Rcpp;
 // Shifted hill function
 
 //extern double Hs_Racipe(double A, double AB0, int n_ab, double lambda_ab);
-//{
-  //return lambda_ab+(1-lambda_ab)*1/(1+pow((A/AB0),n_ab));
-//}
-
-
 //uniformly distributed random number generator in (0,1) range
 //extern std::uniform_real_distribution<double> u_distribution;//(0.0,1.0);
 
@@ -23,7 +18,7 @@ using namespace Rcpp;
 
 // [[Rcpp::export]]
 
-int multiGeneCircuit_RK_deterministic_multiprint(IntegerMatrix gene_interaction, NumericVector threshold_gene,
+int multiGeneCircuit_RK_deterministic_thMod(IntegerMatrix gene_interaction, NumericVector threshold_gene,
                                       double g_min, double g_max,
                                       double k_min, double k_max, int possible_interactions,
                                       long model_count_max,long threshold_max,
@@ -31,11 +26,11 @@ int multiGeneCircuit_RK_deterministic_multiprint(IntegerMatrix gene_interaction,
                                       double lambda_max, int n_min, int n_max,
                                       double tot_time, double median_range,
                                       double standard_deviation_factor, int number_gene,
-                                      int output_precision, int INITIAL_CONDITIONS, String filename, double print_start, double print_interval)
+                                      int output_precision, int INITIAL_CONDITIONS, String filename)
 
 {
   std::string file_name= filename;
-
+  std::cout<<"Modified"<<"\n";
   Rcout<<"Running time evolution simulations for "<<file_name<<" consisting of"<<std::to_string(number_gene)<<" genes for the deterministic case using Runge-Kutta integration method."<<"\n";
 
 
@@ -48,7 +43,7 @@ int multiGeneCircuit_RK_deterministic_multiprint(IntegerMatrix gene_interaction,
   std::fstream out_1("./results/sRACIPE_RK_"+file_name+"_g"+std::to_string(number_gene)+"_output.txt",std::ios::out);
   if(!out_1) {     Rcout << "Cannot open output file.\n";  }
 
- //int print_count = std::floor((tot_time - print_start)/print_interval);
+
 
 
   for(long model_count=0;model_count<model_count_max;model_count++)
@@ -91,6 +86,8 @@ int multiGeneCircuit_RK_deterministic_multiprint(IntegerMatrix gene_interaction,
         else lambda_gene[gene_count1][gene_count2]=(lambda_max-lambda_min)*u_distribution(u_generator)+lambda_min;
       }
     }
+
+
 
     //Initialize threshold for each interaction
 
@@ -200,13 +197,14 @@ int multiGeneCircuit_RK_deterministic_multiprint(IntegerMatrix gene_interaction,
       //Rcout<<"Written"<<"\n";
 
       for(int gene_count1=0;gene_count1<number_gene;gene_count1++)
-      {
-         out_ic<<std::setprecision(output_precision)<<expression_gene0[gene_count1]<<"\t";
-        } //initial condition of each gene
+      {out_ic<<std::setprecision(output_precision)<<expression_gene0[gene_count1]<<"\t";} //initial condition of each gene
 
-       out_ic<<"\n";
-
-
+      out_ic<<"\n";
+      lambda_gene[0][0] = 10*lambda_gene[0][0];
+      lambda_gene[0][1] = 1*lambda_gene[0][1];
+      lambda_gene[1][0] = 1*lambda_gene[1][0];
+      lambda_gene[1][1] = 10*lambda_gene[1][1];
+      g_gene[0] = 10*g_gene[0];
       ///////////////////////////////////////////////////////////////////////////////////////
 
       //Time Evolution
@@ -230,7 +228,6 @@ int multiGeneCircuit_RK_deterministic_multiprint(IntegerMatrix gene_interaction,
       }
 
       double i=0.0;
-      int print_counter = 0;
       do
       {
         for(int gene_count1=0;gene_count1<number_gene;gene_count1++)
@@ -395,18 +392,9 @@ int multiGeneCircuit_RK_deterministic_multiprint(IntegerMatrix gene_interaction,
           expression_gene[gene_count1]=expression_gene_h[gene_count1];}
 
 
-        if((i> (print_start + print_interval*print_counter)) && i < (h+print_start + print_interval*print_counter))
-        {
-          print_counter++;
-          //std::cout<<i<<"\n";
-          for(int gene_count1=0;gene_count1<number_gene;gene_count1++)
-          {
-            out_1<<std::setprecision(output_precision)<<expression_gene[gene_count1]<<"\t";
-          }
-          //out_1<<"\n";
-        }
 
         i+=h;
+
 
       }while(i<tot_time);
 
@@ -420,8 +408,8 @@ int multiGeneCircuit_RK_deterministic_multiprint(IntegerMatrix gene_interaction,
     }
 
   }
- // out_ic<<"\n";
-  out_ic.close();
+  out_ic<<"\n";
+
   out_1.close();
   out_0.close();
   Rcout<<"Deterministic simulations using Runge-Kutta completed successfully. Data files are in results folder.\n";

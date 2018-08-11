@@ -126,7 +126,7 @@ configuration$DNR_MAX <- 0.5*(configuration$DNR_MIN + configuration$DNR_MAX) + 0
 configuration$FCH_MIN <- 0.5*(configuration$FCH_MIN + configuration$FCH_MAX) - 0.5*(configuration$FCH_MAX - configuration$FCH_MIN)*configuration$PARAMETER_RANGE/100
 configuration$FCH_MAX <- 0.5*(configuration$FCH_MIN + configuration$FCH_MAX) + 0.5*(configuration$FCH_MAX - configuration$FCH_MIN)*configuration$PARAMETER_RANGE/100
 
-configuration$MAX_NOISE <- configuration$MAX_NOISE/(topology$number_gene)
+# configuration$MAX_NOISE <- configuration$MAX_NOISE/(topology$number_gene)
 print(configuration)
 
 
@@ -151,7 +151,7 @@ if(threshold_test!=0)
 #return()
 message("Running the stochastic simulations")
 print(configuration)
-
+configuration <<- configuration
 #Rcpp::sourceCpp("src/multiGeneCircuit_EM_uniform_Darray_annealing.cpp")
 
 Time_evolution_test<- multiGeneCircuit_EM_uniform_Darray_annealing(gene_interaction =  gene_interaction, threshold_gene =   threshold_gene, g_min =  configuration$MPR_MIN,  g_max =  configuration$MPR_MAX,k_min = configuration$DNR_MIN,  k_max =  configuration$DNR_MAX, possible_interactions =  configuration$possible_interactions, model_count_max =  configuration$NUM_MODELS, threshold_max =  configuration$THRESHOLD_MODELS, h =  configuration$STEP_SIZE, lambda_min =  configuration$FCH_MIN,lambda_max =  configuration$FCH_MAX, n_min =  configuration$HCO_MIN, n_max =   configuration$HCO_MAX, tot_time =  configuration$SIM_TIME, median_range =  configuration$MEDIAN_RANGE, standard_deviation_factor =  configuration$standard_deviation_factor, number_gene =  topology$number_gene, D_max =   configuration$MAX_NOISE, D_shot_scaling =  configuration$SHOT_NOISE_SCALING, GENE_NOISE_SCALING =  configuration$GENE_NOISE_SCALING, file_writing_interval =  configuration$FILE_WRITING_INTERVAL, D_levels =  configuration$NOISE_LEVELS, D_scaling =  configuration$NOISE_SCALING_FACTOR, output_precision =  configuration$OUTPUT_PRECISION,ANNEALING =   configuration$ANNEALING, CONSTANT_NOISE =  configuration$CONSTANT_NOISE,INITIAL_CONDITIONS =   configuration$INITIAL_CONDITIONS,filename =   topology$filename)

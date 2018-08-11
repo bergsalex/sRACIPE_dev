@@ -188,7 +188,7 @@ plot_data_knockout_single = function(output_file, output_file_knockout, plot_fil
   row.names(data_simulation_knockout) <- name_models
   colnames(data_simulation_knockout) <- name_genes
 
-    data_simulation_knockout <- data_simulation_knockout[,-knockout_number]
+  data_simulation_knockout <- data_simulation_knockout[,-knockout_number]
 
   data_simulation_knockout <- log2(data_simulation_knockout)
   data_simulation_knockout <- sweep(data_simulation_knockout,2,col.means,FUN = "-")

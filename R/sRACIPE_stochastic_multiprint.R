@@ -133,7 +133,7 @@ configuration$DNR_MAX <- 0.5*(configuration$DNR_MIN + configuration$DNR_MAX) + 0
 configuration$FCH_MIN <- 0.5*(configuration$FCH_MIN + configuration$FCH_MAX) - 0.5*(configuration$FCH_MAX - configuration$FCH_MIN)*configuration$PARAMETER_RANGE/100
 configuration$FCH_MAX <- 0.5*(configuration$FCH_MIN + configuration$FCH_MAX) + 0.5*(configuration$FCH_MAX - configuration$FCH_MIN)*configuration$PARAMETER_RANGE/100
 
-configuration$MAX_NOISE <- configuration$MAX_NOISE/(topology$number_gene)
+#configuration$MAX_NOISE <- configuration$MAX_NOISE/(topology$number_gene)
 print(configuration)
 
 

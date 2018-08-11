@@ -1,4 +1,0 @@
-Source Target Type
-B A 1
-C B 1
-B C 1
