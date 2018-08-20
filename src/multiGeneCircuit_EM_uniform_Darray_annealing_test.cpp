@@ -207,7 +207,7 @@ int simulate_GRN(IntegerMatrix gene_interaction, NumericVector threshold_gene,
                  int GENE_NOISE_SCALING, int file_writing_interval,
                  int D_levels, double D_scaling,
                  int output_precision, int ANNEALING, int CONSTANT_NOISE,
-                 int INITIAL_CONDITIONS, String filename, bool parameters_file)
+                 int INITIAL_CONDITIONS, String filename, bool parameters_file, bool readIC)
 
 {
   try {
@@ -259,12 +259,15 @@ int simulate_GRN(IntegerMatrix gene_interaction, NumericVector threshold_gene,
       in_parameters = std::ifstream("./inputs/sRACIPE_EM_"+file_name+"_g"+std::to_string(number_gene)+"_Annealing_"+std::to_string(ANNEALING)+"_pmFile_0"+"_parameters_input.txt",std::ifstream::in);
       if(!in_parameters) {     Rcout << "./inputs/sRACIPE_EM_"+file_name+"_g"+std::to_string(number_gene)+"_Annealing_"+std::to_string(ANNEALING)+"_pmFile_0"+"_parameters_input.txt"<< "Cannot open input file for reading parameters.\n";  return 1;}
 
-      in_ic =  std::ifstream("./inputs/sRACIPE_EM_"+file_name+"_g"+std::to_string(number_gene)+"_Annealing_"+std::to_string(ANNEALING)+"_pmFile_0"+"_IC_input.txt",std::ifstream::in);
-      if(!in_ic) {     Rcout <<"Cannot open input file for reading initial conditions.\n";  return 1;}
+
   //    Rcout<<in_ic.is_open()<<"in_ic open true"<<"\n";
 
     }
-
+    if(readIC)
+    {
+      in_ic =  std::ifstream("./inputs/sRACIPE_EM_"+file_name+"_g"+std::to_string(number_gene)+"_Annealing_"+std::to_string(ANNEALING)+"_pmFile_0"+"_IC_input.txt",std::ifstream::in);
+      if(!in_ic) {     Rcout <<"Cannot open input file for reading initial conditions.\n";  return 1;}
+    }
 // Rcout<<in_ic.is_open()<<"in_ic open true"<<"\n";
 
     //File writing is minimized to speed up the program. Output is written to file after every FILE_WRITING_INTERVAL times.
@@ -338,7 +341,7 @@ int simulate_GRN(IntegerMatrix gene_interaction, NumericVector threshold_gene,
         ///////////////////////////////////////////////////////////////////////////////////////
         std::vector<double> max_gene(number_gene);
         std::vector<double> min_gene(number_gene);
-//   if(!in_ic.is_open())
+   if(!readIC)
         {
           select_IC_range( number_gene,  gene_interaction, g_gene, k_gene, lambda_gene, max_gene, min_gene);
         }
@@ -351,16 +354,16 @@ int simulate_GRN(IntegerMatrix gene_interaction, NumericVector threshold_gene,
         {
           std::vector <double> expression_gene(number_gene); //array for current gene expression
           std::vector <double> expression_gene0(number_gene); //array for initial gene expression
-        //  if(in_ic.is_open())
+          if(readIC)
         {
-          //  for(size_t ic_counter=0;ic_counter <number_gene; ic_counter++)
+            for(size_t ic_counter=0;ic_counter <number_gene; ic_counter++)
             {
-            //  in_ic >> expression_gene0[ic_counter];
+              in_ic >> expression_gene0[ic_counter];
             }
           }
 
 
-          // else
+           else
             {
             for(int gene_count1=0;gene_count1<number_gene;gene_count1++)
             {
@@ -370,23 +373,18 @@ int simulate_GRN(IntegerMatrix gene_interaction, NumericVector threshold_gene,
 
           }
 
-          for(int gene_count1=0;gene_count1<number_gene;gene_count1++)
-          {
-            out_ic<<std::setprecision(output_precision)<<expression_gene0[gene_count1]<<"\t";
-          }
-          out_ic<<"\n";
+
 
           ///////////////////////////////////////////////////////////////////////////////////////
 
           //Writing initial condition to file
           ///////////////////////////////////////////////////////////////////////////////////////
 
-
-          //Rcout<<"Written"<<"\n";
-
-          // for(int gene_count1=0;gene_count1<number_gene;gene_count1++)
-          //{out_ic<<std::setprecision(output_precision)<<expression_gene0[gene_count1]<<"\t";} //initial condition of each gene
-
+          for(int gene_count1=0;gene_count1<number_gene;gene_count1++)
+          {
+            out_ic<<std::setprecision(output_precision)<<expression_gene0[gene_count1]<<"\t";
+          }
+          out_ic<<"\n";
 
 
 
