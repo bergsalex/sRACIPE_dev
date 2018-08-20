@@ -1,0 +1,17 @@
+Add Rcpp::checkUserInterrupt(); or try catch
+Add option to suppress warnings
+Move different functions to one function
+Move extern to header file
+#ifndef __UTILITIES__
+#define __UTILITIES__
+inline double timesTwo(double x) {
+return x * 2;
+}
+#endif // __UTILITIES__
+
+Change function names of helper functions // [[Rcpp::export(name = ".convolveCpp")]]
+Use enum for interaction types
+// [[Rcpp::depends(RcppArmadillo)]] -- top of file --include vkLib dependency for custom Cpp functions
+e these dependencies must still
+be listed in the Imports and/or LinkingTo fields of the package
+DESCRIPTION file.
