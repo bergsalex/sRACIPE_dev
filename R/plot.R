@@ -168,12 +168,13 @@ plot_data_knockout_single = function(output_file, output_file_knockout, plot_fil
   name_genes <- read.table(paste(working_directory,"/results/gene_interaction_topology_",topology$filename,".txt",sep=""), header = T, stringsAsFactors = F)
   name_genes <- t(as.matrix(name_genes))
   data_simulation <- read.table(output_file, header = F)
+  name_models <- seq(1:nrow(data_simulation))
   row.names(data_simulation) <- name_models
   colnames(data_simulation) <- name_genes
   knockout_number <- as.integer(which(name_genes==KNOCKOUT))
 
   data_simulation <- log2(data_simulation)
-  name_models <- seq(1:nrow(data_simulation))
+
 
   data_simulation <- data_simulation[,-knockout_number]
 
@@ -254,11 +255,14 @@ plot_network = function(topology = topology){
 
   nodes <- data.frame(id = node_list, label = node_list, font.size =50, value=c(rep(1,length(node_list))))
   edge_col <- data.frame(c(1,2),c("blue","darkred"))
+  arrow_type <- data.frame(c(1,2),c("arrow","circle"))
+  colnames(arrow_type) <- c("type", "color")
   colnames(edge_col) <- c("type", "color")
   edges <- data.frame(from = c(topology$topology[,1]), to = c(topology$topology[,2])
                       #   , arrows = c(c(topology$topology$Target), c(topology$topology$Target))
-                      , arrows = "to"
-                      , width = 2
+                      #, arrows = "to"
+                      , arrows.to.type	=arrow_type$color[c(as.numeric(topology$topology[,3]))]
+                      , width = 3
                       , color = edge_col$color[c(as.numeric(topology$topology[,3]))]
   )
 
