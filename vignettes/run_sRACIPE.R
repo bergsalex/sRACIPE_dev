@@ -8,19 +8,23 @@ topology_file <- "inputs/test2.tpo"
 topology <- sRACIPE_load_topology(topology_file = topology_file)
 output_file <- sRACIPE_RK_deterministic(topology_file = topology_file)
 
+plot_data_deterministic(output_file, plot_filename = topology$filename)
 
+# Works for data generated using sRACIPE_RK_deterministic, sRACIPE_RK_adaptive_deterministic
+
+# To use adaptive time step methjod
 #output_file <- sRACIPE_RK_adaptive_deterministic(topology_file = topology_file)
 
+# For stochastic simulations
 #output_file <- sRACIPE_stochastic(topology_file = topology_file)
 
-
+# For stochastic simulations and evaluation of whether the steady state soultions are fixed point or not
 #output_file <- sRACIPE_stochastic_multiprint(topology_file = topology_file, NUM_MODELS = 10,ANNEAL = T, NOISE_LEVELS = 4, PRINT_START = 40, PRINT_INTERVAL = 4)
 
 
-#plot_data_deterministic(output_file, plot_filename = topology$filename) # Works for data generated using sRACIPE_RK_deterministic, sRACIPE_RK_adaptive_deterministic
-
 #plot_data_stochastic(output_file, plot_filename=topology$filename, topology_df=topology, config = configuration, bin_count=40)
-### Works for data generated using sRACIPE_stochastic, sRACIPE_stochastic_multiprint
+
+## Works for data generated using sRACIPE_stochastic, sRACIPE_stochastic_multiprint
 
 #plot_interactive_heatmap(output_file, plot_filename = topology$filename)
 
