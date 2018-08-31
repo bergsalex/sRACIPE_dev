@@ -12,7 +12,7 @@ Installing R package from GitHub
 2) Load the devtools package:
 	library(devtools)
 3) Install sRACIPE from GitHub:
-	install_github("vivekkohar/sRACIPE_dev")
+	install_github("TheJacksonLaboratory/sRACIPE_dev")
 
 sRACIPE is a self contained package and includes all the dependencies in the packrat folder.
 Packrat can be installed using install.packages("packrat").
